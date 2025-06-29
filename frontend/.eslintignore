@@ -1,0 +1,9 @@
+node_modules
+build
+dist
+coverage
+public
+src/reportWebVitals.js
+*.min.js
+.env
+.env.* 

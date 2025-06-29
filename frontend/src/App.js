@@ -49,10 +49,7 @@ function App() {
 					{user && (
 						<div className="user-info">
 							<span>Welcome, {user.name}!</span>
-							<button
-								onClick={handleLogout}
-								className="logout-btn"
-							>
+							<button onClick={handleLogout} className="logout-btn">
 								Logout
 							</button>
 						</div>
@@ -93,11 +90,7 @@ function App() {
 						/>
 						<Route
 							path="/"
-							element={
-								<Navigate
-									to={token ? "/dashboard" : "/login"}
-								/>
-							}
+							element={<Navigate to={token ? "/dashboard" : "/login"} />}
 						/>
 					</Routes>
 				</main>
