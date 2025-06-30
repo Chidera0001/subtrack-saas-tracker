@@ -63,8 +63,8 @@ Ensure your development environment includes:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/subtrack-saas-tracker.git
-cd subtrack-saas-tracker
+   git clone https://github.com/yourusername/subtrack-saas-tracker.git
+   cd subtrack-saas-tracker
 ```
 
 ### Step 2: Database Configuration
@@ -75,32 +75,32 @@ cd subtrack-saas-tracker
 psql -c "CREATE DATABASE subtrack;"
 
 # Initialize schema
-psql -d subtrack -f database/schema.sql
+   psql -d subtrack -f database/schema.sql
 ```
 
 ### Step 3: Backend Configuration
 
 ```bash
 # Navigate to backend directory
-cd backend
+   cd backend
 
 # Install dependencies
-npm install
+   npm install
 
 # Configure environment variables
-cp .env.example .env
+   cp .env.example .env
 ```
 
 **Environment Configuration** (`.env`):
 
 ```env
-PORT=5000
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=subtrack
-DB_USER=your_postgres_username
-DB_PASSWORD=your_postgres_password
-JWT_SECRET=your_super_secret_jwt_key
+   PORT=5000
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=subtrack
+   DB_USER=your_postgres_username
+   DB_PASSWORD=your_postgres_password
+   JWT_SECRET=your_super_secret_jwt_key
 ```
 
 ```bash
@@ -117,24 +117,24 @@ npm start
 
 ```bash
 # Navigate to frontend directory
-cd ../frontend
+   cd ../frontend
 
 # Install dependencies
-npm install
+   npm install
 
 # Configure environment
-cp .env.example .env
+   cp .env.example .env
 ```
 
 **Frontend Configuration** (`.env`):
 
 ```env
-REACT_APP_API_URL=http://localhost:5000
+   REACT_APP_API_URL=http://localhost:5000
 ```
 
 ```bash
 # Launch development server
-npm start
+   npm start
 ```
 
 🎨 Frontend application available at: `http://localhost:3000`

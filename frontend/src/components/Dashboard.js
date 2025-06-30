@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const Dashboard = ({ token, user }) => {
@@ -12,11 +12,7 @@ const Dashboard = ({ token, user }) => {
 		payment_method: "",
 	});
 
-	useEffect(() => {
-		fetchSubscriptions();
-	}, []);
-
-	const fetchSubscriptions = async () => {
+	const fetchSubscriptions = useCallback(async () => {
 		try {
 			const response = await axios.get(
 				`${
@@ -32,7 +28,11 @@ const Dashboard = ({ token, user }) => {
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, [token]);
+
+	useEffect(() => {
+		fetchSubscriptions();
+	}, [fetchSubscriptions]);
 
 	const handleInputChange = (e) => {
 		setFormData({
@@ -69,10 +69,7 @@ const Dashboard = ({ token, user }) => {
 
 	const calculateTotalMonthly = () => {
 		return subscriptions
-			.reduce(
-				(total, sub) => total + parseFloat(sub.monthly_cost || 0),
-				0
-			)
+			.reduce((total, sub) => total + parseFloat(sub.monthly_cost || 0), 0)
 			.toFixed(2);
 	};
 
@@ -82,10 +79,7 @@ const Dashboard = ({ token, user }) => {
 		<div className="dashboard">
 			<div className="dashboard-header">
 				<h2>Your Subscriptions</h2>
-				<button
-					onClick={() => setShowForm(!showForm)}
-					className="add-btn"
-				>
+				<button onClick={() => setShowForm(!showForm)} className="add-btn">
 					{showForm ? "Cancel" : "Add Subscription"}
 				</button>
 			</div>
@@ -152,15 +146,10 @@ const Dashboard = ({ token, user }) => {
 					</p>
 				) : (
 					subscriptions.map((subscription) => (
-						<div
-							key={subscription.id}
-							className="subscription-card"
-						>
+						<div key={subscription.id} className="subscription-card">
 							<div className="subscription-info">
 								<h4>{subscription.service_name}</h4>
-								<p className="cost">
-									${subscription.monthly_cost}/month
-								</p>
+								<p className="cost">${subscription.monthly_cost}/month</p>
 								<p className="next-payment">
 									Next payment:{" "}
 									{new Date(
