@@ -285,3 +285,47 @@ When reporting issues, please include:
 _Star ⭐ this repository if you find it helpful!_
 
 </div>
+
+## Docker-based Local Development Setup
+
+### Prerequisites
+
+-   [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed
+-   (Optional) [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) for cloud deployment
+
+### 1. Clone the Repository
+
+```sh
+git clone <your-repo-url>
+cd subtrack-saas-tracker
+```
+
+### 2. Build and Run with Docker Compose
+
+```sh
+docker-compose up --build
+```
+
+-   This will build and start the backend, frontend, and a local PostgreSQL database.
+-   The backend will be available at `http://localhost:8181`
+-   The frontend will be available at `http://localhost:3000`
+
+### 3. Environment Variables
+
+-   Edit the `.env` files in `backend/` and `frontend/` as needed for local development.
+-   For production, set environment variables in your cloud provider (see below).
+
+### 4. Stopping the App
+
+```sh
+docker-compose down
+```
+
+### 5. Deploying to Azure (Manual)
+
+-   Build and push Docker images for backend and frontend to Azure Container Registry.
+-   Update your App Service to use the new image tags.
+-   Set environment variables in Azure App Service Configuration.
+-   See `terraform/` for IaC scripts to provision Azure resources.
+
+---

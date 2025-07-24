@@ -1,5 +1,5 @@
--- Create database
-CREATE DATABASE subtrack;
+-- -- Create database
+-- CREATE DATABASE subtrack;
 
 -- Connect to the database
 \c subtrack;

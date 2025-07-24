@@ -109,6 +109,14 @@ dist/
 # TernJS port file
 .tern-port
 
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+
+*.tfstate
+*.tfstate.*
+
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 

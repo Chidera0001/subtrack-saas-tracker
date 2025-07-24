@@ -3,10 +3,19 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 8181; // Force port to 8181 for Azure deployment
 
 // Middleware
-app.use(cors());
+app.use(
+	cors({
+		origin: [
+			'http://localhost:3000',
+			'https://subtrack-frontend.azurewebsites.net',
+			'https://subtrack-frontend.azurewebsites.net/',
+		],
+		credentials: true,
+	})
+);
 app.use(express.json());
 
 // Routes
