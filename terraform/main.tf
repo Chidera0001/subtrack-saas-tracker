@@ -79,11 +79,11 @@ resource "azurerm_app_service" "backend" {
   app_service_plan_id = azurerm_app_service_plan.main.id
 
   site_config {
-    linux_fx_version = "DOCKER|${azurerm_container_registry.main.login_server}/${var.project_name}-backend:latest"
+    linux_fx_version = "DOCKER|${azurerm_container_registry.main.login_server}/${var.project_name}-backend:v2"
   }
 
   app_settings = {
-    WEBSITES_PORT                  = "5000"
+    WEBSITES_PORT                  = "8181"
     DOCKER_REGISTRY_SERVER_URL      = "https://${azurerm_container_registry.main.login_server}"
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.main.admin_username
     DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.main.admin_password

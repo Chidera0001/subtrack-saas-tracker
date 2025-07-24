@@ -18,9 +18,9 @@ services:
             - DB_NAME=subtrack
             - DB_HOST=db
             - DB_PORT=5432
-            - NODE_ENV=production
+              - NODE_ENV=production
         ports:
-            - "5000:5000"
+            - "8181:8181"
         depends_on:
             - db
 
