@@ -21,13 +21,11 @@ Link to the Pull Request you reviewed for your peer:
 ## **Required Screenshots for Provisioned Resources**
 
 -   Reference:
-    ```markdown
     ![Resource Group Overview](screenshots/subtrack-rg.png)
     ![Backend App Service](screenshots/backend-app-service.png)
     ![Frontend App Service](screenshots/frontend-app-service.png)
     ![PostgreSQL Overview](screenshots/postgres-overview.png)
     ![Live App](screenshots/live-app.png)
-    ```
 
 ---
 
