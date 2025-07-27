@@ -1,15 +1,11 @@
 export default {
 	testEnvironment: 'node',
-	globals: {
-		'ts-jest': {
-			useESM: true,
-		},
+	transform: {
+		'^.+\\.jsx?$': 'babel-jest',
 	},
 	moduleNameMapper: {
 		'^(\\.{1,2}/.*)\\.js$': '$1',
 	},
-	transform: {},
-	preset: undefined,
 	testMatch: ['**/__tests__/**/*.js'],
 	collectCoverageFrom: ['**/*.js', '!**/node_modules/**', '!**/coverage/**'],
 };
