@@ -1,6 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import authRoutes from './routes/auth.js';
+import subscriptionRoutes from './routes/subscription.js';
+
+dotenv.config();
 
 const app = express();
 const PORT = 8181; // Force port to 8181 for Azure deployment
@@ -24,8 +28,8 @@ app.get('/api/health', (req, res) => {
 });
 
 // Auth routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/subscriptions', require('./routes/subscription'));
+app.use('/api/auth', authRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 
 // Error handling middleware
 app.use((err, req, res, _next) => {
@@ -37,4 +41,4 @@ app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
 
-module.exports = app;
+export default app;
