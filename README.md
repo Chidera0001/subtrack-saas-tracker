@@ -103,6 +103,26 @@ psql -c "CREATE DATABASE subtrack;"
    JWT_SECRET=your_super_secret_jwt_key
 ```
 
+## 🌐 Live Environments
+
+### Production Environment
+
+-   **Frontend**: https://subtrack-saas-tracker-frontend.azurewebsites.net
+-   **Backend API**: https://subtrack-saas-tracker-backend.azurewebsites.net
+-   **Status**: ✅ Live and Operational
+
+### Staging Environment
+
+-   **Frontend**: https://subtrack-saas-tracker-frontend-staging.azurewebsites.net
+-   **Backend API**: https://subtrack-saas-tracker-backend-staging.azurewebsites.net
+-   **Status**: 🔄 Updated on Pull Requests to develop branch
+
+### Monitoring & Observability
+
+-   **Application Insights**: Available in Azure Portal
+-   **Alerts**: CPU usage monitoring (>80% threshold)
+-   **Logs**: Real-time application logging via Azure App Service
+
 ```bash
 # Start development server
 npm run dev

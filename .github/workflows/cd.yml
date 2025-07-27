@@ -1,0 +1,233 @@
+name: CD Pipeline
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+env:
+    REGISTRY: ${{ secrets.REGISTRY_NAME }}.azurecr.io
+    BACKEND_IMAGE: ${{ secrets.REGISTRY_NAME }}.azurecr.io/subtrack-saas-tracker-backend
+    FRONTEND_IMAGE: ${{ secrets.REGISTRY_NAME }}.azurecr.io/subtrack-saas-tracker-frontend
+
+jobs:
+    security-scan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Run Trivy vulnerability scanner
+              uses: aquasecurity/trivy-action@master
+              with:
+                  scan-type: "fs"
+                  scan-ref: "."
+                  format: "sarif"
+                  output: "trivy-results.sarif"
+
+            - name: Upload Trivy scan results to GitHub Security tab
+              uses: github/codeql-action/upload-sarif@v2
+              if: always()
+              with:
+                  sarif_file: "trivy-results.sarif"
+
+    dependency-scan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "18"
+
+            - name: Install dependencies
+              run: |
+                  cd backend && npm ci
+                  cd ../frontend && npm ci
+
+            - name: Run npm audit
+              run: |
+                  cd backend && npm audit --audit-level=moderate
+                  cd ../frontend && npm audit --audit-level=moderate
+
+    build-and-test:
+        runs-on: ubuntu-latest
+        needs: [security-scan, dependency-scan]
+
+        services:
+            postgres:
+                image: postgres:13
+                env:
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: subtrack_test
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 5432:5432
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "18"
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: |
+                  cd backend && npm ci
+                  cd ../frontend && npm ci
+
+            - name: Run backend tests
+              working-directory: ./backend
+              run: npm test
+              env:
+                  DB_HOST: localhost
+                  DB_PORT: 5432
+                  DB_NAME: subtrack_test
+                  DB_USER: postgres
+                  DB_PASSWORD: postgres
+                  JWT_SECRET: test_secret
+
+            - name: Run frontend tests
+              working-directory: ./frontend
+              run: npm test -- --coverage --watchAll=false
+
+            - name: Build frontend
+              working-directory: ./frontend
+              run: npm run build
+
+    build-and-push-staging:
+        runs-on: ubuntu-latest
+        needs: build-and-test
+        if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+
+            - name: Log in to Azure Container Registry
+              uses: azure/docker-login@v1
+              with:
+                  login-server: ${{ env.REGISTRY }}
+                  username: ${{ secrets.REGISTRY_USERNAME }}
+                  password: ${{ secrets.REGISTRY_PASSWORD }}
+
+            - name: Build and push backend staging image
+              uses: docker/build-push-action@v4
+              with:
+                  context: ./backend
+                  push: true
+                  tags: ${{ env.BACKEND_IMAGE }}:staging
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+
+            - name: Build and push frontend staging image
+              uses: docker/build-push-action@v4
+              with:
+                  context: ./frontend
+                  push: true
+                  tags: ${{ env.FRONTEND_IMAGE }}:staging
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+
+    deploy-staging:
+        runs-on: ubuntu-latest
+        needs: build-and-push-staging
+        if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+
+        steps:
+            - name: Deploy to staging
+              uses: azure/webapps-deploy@v2
+              with:
+                  app-name: "subtrack-saas-tracker-backend-staging"
+                  images: ${{ env.BACKEND_IMAGE }}:staging
+
+            - name: Deploy frontend to staging
+              uses: azure/webapps-deploy@v2
+              with:
+                  app-name: "subtrack-saas-tracker-frontend-staging"
+                  images: ${{ env.FRONTEND_IMAGE }}:staging
+
+    build-and-push-production:
+        runs-on: ubuntu-latest
+        needs: build-and-test
+        if: github.ref == 'refs/heads/main'
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+
+            - name: Log in to Azure Container Registry
+              uses: azure/docker-login@v1
+              with:
+                  login-server: ${{ env.REGISTRY }}
+                  username: ${{ secrets.REGISTRY_USERNAME }}
+                  password: ${{ secrets.REGISTRY_PASSWORD }}
+
+            - name: Build and push backend production image
+              uses: docker/build-push-action@v4
+              with:
+                  context: ./backend
+                  push: true
+                  tags: ${{ env.BACKEND_IMAGE }}:latest
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+
+            - name: Build and push frontend production image
+              uses: docker/build-push-action@v4
+              with:
+                  context: ./frontend
+                  push: true
+                  tags: ${{ env.FRONTEND_IMAGE }}:latest
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+
+    deploy-production:
+        runs-on: ubuntu-latest
+        needs: build-and-push-production
+        if: github.ref == 'refs/heads/main'
+        environment: production
+
+        steps:
+            - name: Deploy backend to production
+              uses: azure/webapps-deploy@v2
+              with:
+                  app-name: "subtrack-saas-tracker-backend"
+                  images: ${{ env.BACKEND_IMAGE }}:latest
+
+            - name: Deploy frontend to production
+              uses: azure/webapps-deploy@v2
+              with:
+                  app-name: "subtrack-saas-tracker-frontend"
+                  images: ${{ env.FRONTEND_IMAGE }}:latest
+
+            - name: Update CHANGELOG
+              run: |
+                  echo "## [$(date +%Y-%m-%d)] - $(date +%Y-%m-%d)" >> CHANGELOG.md
+                  echo "" >> CHANGELOG.md
+                  echo "### Deployed" >> CHANGELOG.md
+                  echo "- Automated deployment from main branch" >> CHANGELOG.md
+                  echo "" >> CHANGELOG.md
+
+            - name: Commit and push CHANGELOG
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add CHANGELOG.md
+                  git commit -m "docs: update changelog for deployment" || exit 0
+                  git push
