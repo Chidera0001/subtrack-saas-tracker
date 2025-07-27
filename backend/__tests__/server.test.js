@@ -1,6 +1,12 @@
 import request from 'supertest';
 import app from '../server.js';
 
+// Mock the database connection to avoid actual DB calls during tests
+jest.mock('../config/db.js', () => ({
+	query: jest.fn(),
+	on: jest.fn(),
+}));
+
 describe('API Health Check', () => {
 	test('GET /api/health should return OK status', async () => {
 		const response = await request(app).get('/api/health').expect(200);
