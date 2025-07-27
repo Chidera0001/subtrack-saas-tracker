@@ -2,7 +2,14 @@
 
 ## Live Public URL
 
-Paste your live app URL here ( https://subtrack-frontend.azurewebsites.net)
+**Frontend Application**: https://subtrack-frontend.azurewebsites.net
+**Backend API**: https://subtrack-backend.azurewebsites.net/api/health
+
+**Status**: ✅ Live and Fully Functional
+
+-   User registration and login working
+-   Database connected and operational
+-   CD pipeline configured and ready
 
 ## Peer Review
 
@@ -28,6 +35,18 @@ Link to the Pull Request you reviewed for your peer:
     ![Live App](screenshots/live-app.png)
 
 ---
+
+## **CD Pipeline Status**
+
+**GitHub Actions Workflow**: ✅ Configured and Ready
+
+-   **Security Scanning**: Trivy vulnerability scanning
+-   **Dependency Scanning**: npm audit integration
+-   **Automated Testing**: Jest test suite
+-   **Staging Deployment**: Automatic on PR to develop
+-   **Production Deployment**: Automatic on merge to main
+
+**Pipeline URL**: https://github.com/Chidera0001/subtrack-saas-tracker/actions
 
 ## **Summary Table**
 
