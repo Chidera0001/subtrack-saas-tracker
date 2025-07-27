@@ -37,8 +37,11 @@ app.use((err, req, res, _next) => {
 	res.status(500).json({ error: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
-});
+// Only start the server if this file is run directly (not imported for testing)
+if (import.meta.url === `file://${process.argv[1]}`) {
+	app.listen(PORT, () => {
+		console.log(`Server running on port ${PORT}`);
+	});
+}
 
 export default app;
