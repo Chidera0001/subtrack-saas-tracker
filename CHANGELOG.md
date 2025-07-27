@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Security scanning in CI/CD pipeline
 -   Automated testing suite
 -   Conventional commit standards
+-   Dashboard statistics display (total monthly cost and active subscriptions count)
 
 ### Changed
 
