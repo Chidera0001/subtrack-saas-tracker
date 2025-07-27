@@ -38,7 +38,7 @@ app.use((err, req, res, _next) => {
 });
 
 // Only start the server if this file is run directly (not imported for testing)
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.env.NODE_ENV !== 'test') {
 	app.listen(PORT, () => {
 		console.log(`Server running on port ${PORT}`);
 	});
