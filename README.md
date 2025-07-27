@@ -124,6 +124,47 @@ psql -c "CREATE DATABASE subtrack;"
 -   **Alerts**: CPU usage monitoring (>80% threshold)
 -   **Logs**: Real-time application logging via Azure App Service
 
+## 🔗 API Endpoints
+
+### Backend API Endpoints
+
+**Base URL**: `https://subtrack-backend.azurewebsites.net`
+
+#### Health Check
+
+-   `GET /api/health` - Application health status
+
+#### Authentication Endpoints
+
+-   `POST /api/auth/register` - Register new user account
+-   `POST /api/auth/login` - User authentication
+
+#### Subscription Management
+
+-   `GET /api/subscriptions` - Retrieve all user subscriptions (requires authentication)
+-   `POST /api/subscriptions` - Create new subscription record (requires authentication)
+-   `PUT /api/subscriptions/:id` - Update existing subscription (requires authentication)
+-   `DELETE /api/subscriptions/:id` - Remove subscription record (requires authentication)
+
+### Frontend Routes
+
+**Base URL**: `https://subtrack-frontend.azurewebsites.net`
+
+-   `/` - Home page with login/register options
+-   `/login` - User login page
+-   `/register` - User registration page
+-   `/dashboard` - Main dashboard (requires authentication)
+
+### Testing the API
+
+```bash
+# Health check
+curl https://subtrack-backend.azurewebsites.net/api/health
+
+# Expected response:
+# {"status":"OK","message":"SubTrack API is running"}
+```
+
 ```bash
 # Start development server
 npm run dev
