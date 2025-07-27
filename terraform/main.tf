@@ -74,45 +74,7 @@ resource "azurerm_monitor_action_group" "main" {
   short_name          = "subtrack"
 }
 
-# Metric Alert for Backend Memory Usage
-resource "azurerm_monitor_metric_alert" "backend_memory_alert" {
-  name                = "${var.project_name}-backend-memory-alert"
-  resource_group_name = azurerm_resource_group.main.name
-  scopes               = [azurerm_app_service.backend.id]
-  description          = "Alert when backend memory usage is high"
-
-  criteria {
-    metric_namespace = "Microsoft.Web/sites"
-    metric_name      = "MemoryPercentage"
-    aggregation      = "Average"
-    operator         = "GreaterThan"
-    threshold        = 80
-  }
-
-  action {
-    action_group_id = azurerm_monitor_action_group.main.id
-  }
-}
-
-# Metric Alert for Frontend Memory Usage
-resource "azurerm_monitor_metric_alert" "frontend_memory_alert" {
-  name                = "${var.project_name}-frontend-memory-alert"
-  resource_group_name = azurerm_resource_group.main.name
-  scopes               = [azurerm_app_service.frontend.id]
-  description          = "Alert when frontend memory usage is high"
-
-  criteria {
-    metric_namespace = "Microsoft.Web/sites"
-    metric_name      = "MemoryPercentage"
-    aggregation      = "Average"
-    operator         = "GreaterThan"
-    threshold        = 80
-  }
-
-  action {
-    action_group_id = azurerm_monitor_action_group.main.id
-  }
-}
+# Monitoring alerts will be added later when we identify the correct metric names
 
 resource "azurerm_app_service_plan" "main" {
   name                = "${var.project_name}-plan"
