@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%3E%3D12.0-blue)](https://www.postgresql.org/)
+[![CD Pipeline](https://img.shields.io/badge/CD%20Pipeline-Active-brightgreen)](https://github.com/Chidera0001/subtrack-saas-tracker/actions)
 
 _Take control of your subscription expenses with intelligent tracking and reminders_
 
@@ -102,6 +103,26 @@ psql -c "CREATE DATABASE subtrack;"
    DB_PASSWORD=your_postgres_password
    JWT_SECRET=your_super_secret_jwt_key
 ```
+
+## 🌐 Live Environments
+
+### Production Environment
+
+-   **Frontend**: https://subtrack-saas-tracker-frontend.azurewebsites.net
+-   **Backend API**: https://subtrack-saas-tracker-backend.azurewebsites.net
+-   **Status**: ✅ Live and Operational
+
+### Staging Environment
+
+-   **Frontend**: https://subtrack-saas-tracker-frontend-staging.azurewebsites.net
+-   **Backend API**: https://subtrack-saas-tracker-backend-staging.azurewebsites.net
+-   **Status**: 🔄 Updated on Pull Requests to develop branch
+
+### Monitoring & Observability
+
+-   **Application Insights**: Available in Azure Portal
+-   **Alerts**: CPU usage monitoring (>80% threshold)
+-   **Logs**: Real-time application logging via Azure App Service
 
 ```bash
 # Start development server

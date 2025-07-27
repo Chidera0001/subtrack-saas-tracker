@@ -1,0 +1,37 @@
+name: Branch Protection Setup
+
+on:
+    workflow_dispatch:
+
+jobs:
+    setup-protection:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Setup branch protection for main
+              uses: actions/github-script@v6
+              with:
+                  script: |
+                      const { data: branch } = await github.rest.repos.getBranch({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        branch: 'main'
+                      });
+
+                      await github.rest.repos.updateBranchProtection({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        branch: 'main',
+                        required_status_checks: {
+                          strict: true,
+                          contexts: ['build-and-test', 'security-scan', 'dependency-scan']
+                        },
+                        enforce_admins: false,
+                        required_pull_request_reviews: {
+                          required_approving_review_count: 1,
+                          dismiss_stale_reviews: true,
+                          require_code_owner_reviews: false
+                        },
+                        restrictions: null
+                      });
+
+                      console.log('Branch protection rules applied to main branch');

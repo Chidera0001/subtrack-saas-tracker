@@ -59,6 +59,61 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "allow_azure_service
   end_ip_address      = "0.0.0.0"
 }
 
+# Application Insights for Monitoring
+resource "azurerm_application_insights" "main" {
+  name                = "${var.project_name}-insights"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  application_type    = "web"
+}
+
+# Action Group for Alerts
+resource "azurerm_monitor_action_group" "main" {
+  name                = "${var.project_name}-action-group"
+  resource_group_name = azurerm_resource_group.main.name
+  short_name          = "subtrack"
+}
+
+# Metric Alert for Backend Memory Usage
+resource "azurerm_monitor_metric_alert" "backend_memory_alert" {
+  name                = "${var.project_name}-backend-memory-alert"
+  resource_group_name = azurerm_resource_group.main.name
+  scopes               = [azurerm_app_service.backend.id]
+  description          = "Alert when backend memory usage is high"
+
+  criteria {
+    metric_namespace = "Microsoft.Web/sites"
+    metric_name      = "MemoryPercentage"
+    aggregation      = "Average"
+    operator         = "GreaterThan"
+    threshold        = 80
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.main.id
+  }
+}
+
+# Metric Alert for Frontend Memory Usage
+resource "azurerm_monitor_metric_alert" "frontend_memory_alert" {
+  name                = "${var.project_name}-frontend-memory-alert"
+  resource_group_name = azurerm_resource_group.main.name
+  scopes               = [azurerm_app_service.frontend.id]
+  description          = "Alert when frontend memory usage is high"
+
+  criteria {
+    metric_namespace = "Microsoft.Web/sites"
+    metric_name      = "MemoryPercentage"
+    aggregation      = "Average"
+    operator         = "GreaterThan"
+    threshold        = 80
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.main.id
+  }
+}
+
 resource "azurerm_app_service_plan" "main" {
   name                = "${var.project_name}-plan"
   location            = azurerm_resource_group.main.location
@@ -99,6 +154,45 @@ resource "azurerm_app_service" "frontend" {
 
   site_config {
     linux_fx_version = "DOCKER|${azurerm_container_registry.main.login_server}/${var.project_name}-frontend:latest"
+  }
+
+  app_settings = {
+    WEBSITES_PORT                  = "80"
+    DOCKER_REGISTRY_SERVER_URL      = "https://${azurerm_container_registry.main.login_server}"
+    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.main.admin_username
+    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.main.admin_password
+    # Add any frontend environment variables here
+  }
+}
+
+# Staging Environment
+resource "azurerm_app_service" "backend_staging" {
+  name                = "${var.project_name}-backend-staging"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  app_service_plan_id = azurerm_app_service_plan.main.id
+
+  site_config {
+    linux_fx_version = "DOCKER|${azurerm_container_registry.main.login_server}/${var.project_name}-backend:staging"
+  }
+
+  app_settings = {
+    WEBSITES_PORT                  = "8181"
+    DOCKER_REGISTRY_SERVER_URL      = "https://${azurerm_container_registry.main.login_server}"
+    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.main.admin_username
+    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.main.admin_password
+    # Add your backend environment variables here, e.g. DB connection string
+  }
+}
+
+resource "azurerm_app_service" "frontend_staging" {
+  name                = "${var.project_name}-frontend-staging"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  app_service_plan_id = azurerm_app_service_plan.main.id
+
+  site_config {
+    linux_fx_version = "DOCKER|${azurerm_container_registry.main.login_server}/${var.project_name}-frontend:staging"
   }
 
   app_settings = {

@@ -81,7 +81,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+# public
 
 # vue-nuxt generate output
 .nuxt

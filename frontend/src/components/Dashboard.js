@@ -79,6 +79,14 @@ const Dashboard = ({ token, user }) => {
 		<div className="dashboard">
 			<div className="dashboard-header">
 				<h2>Your Subscriptions</h2>
+				<div className="dashboard-stats">
+					<span className="stat-item">
+						📊 Total Monthly: ${calculateTotalMonthly()}
+					</span>
+					<span className="stat-item">
+						📅 Active Subscriptions: {subscriptions.length}
+					</span>
+				</div>
 				<button onClick={() => setShowForm(!showForm)} className="add-btn">
 					{showForm ? "Cancel" : "Add Subscription"}
 				</button>

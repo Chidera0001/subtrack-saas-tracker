@@ -1,4 +1,5 @@
-const { Pool } = require('pg');
+import pg from 'pg';
+const { Pool } = pg;
 
 const pool = new Pool({
 	user: process.env.DB_USER || 'postgres',
@@ -20,4 +21,4 @@ pool.on('error', (err) => {
 	console.error('Database connection error:', err);
 });
 
-module.exports = pool;
+export default pool;
