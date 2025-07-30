@@ -16,7 +16,8 @@ const Dashboard = ({ token, user }) => {
 		try {
 			const response = await axios.get(
 				`${
-					process.env.REACT_APP_API_URL || "http://localhost:5000"
+					process.env.REACT_APP_API_URL ||
+					"https://subtrack-backend.azurewebsites.net"
 				}/api/subscriptions`,
 				{
 					headers: { Authorization: `Bearer ${token}` },
@@ -46,7 +47,8 @@ const Dashboard = ({ token, user }) => {
 		try {
 			await axios.post(
 				`${
-					process.env.REACT_APP_API_URL || "http://localhost:5000"
+					process.env.REACT_APP_API_URL ||
+					"https://subtrack-backend.azurewebsites.net"
 				}/api/subscriptions`,
 				formData,
 				{
@@ -79,7 +81,7 @@ const Dashboard = ({ token, user }) => {
 		<div className="dashboard">
 			<div className="dashboard-header">
 				<h1>
-					Welcome {user.name} today's date is {new Date().toLocaleDateString()}
+					Welcome {user.name}! Today's date is {new Date().toLocaleDateString()}
 				</h1>
 				<h2>Your Subscriptions</h2>
 				<div className="dashboard-stats">
