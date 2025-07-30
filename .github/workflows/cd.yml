@@ -253,6 +253,7 @@ jobs:
                   git config --local user.name "GitHub Action"
                   git add CHANGELOG.md
                   git commit -m "docs: update changelog for deployment" || exit 0
+                  git pull --rebase origin main || git pull origin main --strategy-option theirs
                   git push origin HEAD:main
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
