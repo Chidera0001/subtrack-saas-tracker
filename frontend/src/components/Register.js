@@ -40,7 +40,8 @@ const Register = ({ onLogin }) => {
 		try {
 			const response = await axios.post(
 				`${
-					process.env.REACT_APP_API_URL || "https://subtrack-backend.azurewebsites.net"
+					process.env.REACT_APP_API_URL ||
+					"https://subtrack-backend.azurewebsites.net"
 				}/api/auth/register`,
 				{
 					name: formData.name,
