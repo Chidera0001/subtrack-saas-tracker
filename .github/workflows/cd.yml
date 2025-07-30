@@ -251,13 +251,11 @@ jobs:
                   echo "- Automated deployment from main branch" >> CHANGELOG.md
                   echo "" >> CHANGELOG.md
 
-            - name: Create Pull Request for CHANGELOG update
-              uses: peter-evans/create-pull-request@v6
-              with:
-                  commit-message: "docs: update changelog for deployment"
-                  branch: "changelog-update-${{ github.run_id }}"
-                  title: "Automated CHANGELOG update"
-                  body: "Automated update of CHANGELOG.md after deployment"
-                  base: main
-                  add-paths: CHANGELOG.md
-                  token: ${{ secrets.GITHUB_TOKEN }}
+            - name: Commit CHANGELOG update
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add CHANGELOG.md
+                  git commit -m "docs: update changelog for deployment" || exit 0
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
