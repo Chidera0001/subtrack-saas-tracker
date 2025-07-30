@@ -17,6 +17,10 @@ SubTrack is a comprehensive web application designed to help individuals manage 
 
 **Why SubTrack?** In today's digital landscape, it's easy to lose track of recurring subscriptions, leading to unexpected charges and budget overruns. SubTrack eliminates surprise billing by providing complete visibility into your subscription portfolio.
 
+## 🎥 Demo
+
+Watch SubTrack in action! Check out our [video demonstration](https://youtu.be/YXmaPUD9-LM) to see the application's features and user interface.
+
 ## ✨ Key Features
 
 -   **🔐 Secure Authentication** - Robust user registration and login system with JWT-based security
