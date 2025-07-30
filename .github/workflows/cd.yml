@@ -220,6 +220,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
               with:
+                  ref: main
                   token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Azure Login
@@ -251,8 +252,11 @@ jobs:
               run: |
                   git config --local user.email "action@github.com"
                   git config --local user.name "GitHub Action"
+                  git fetch origin main
+                  git checkout main
+                  git pull origin main
                   git add CHANGELOG.md
                   git commit -m "docs: update changelog for deployment" || exit 0
-                  git push
+                  git push origin main
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
