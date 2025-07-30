@@ -6,6 +6,10 @@ on:
     pull_request:
         branches: [main]
 
+permissions:
+    contents: write
+    pull-requests: write
+
 env:
     REGISTRY: ${{ secrets.REGISTRY_NAME }}.azurecr.io
     BACKEND_IMAGE: ${{ secrets.REGISTRY_NAME }}.azurecr.io/subtrack-saas-tracker-backend
