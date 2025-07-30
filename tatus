@@ -1,0 +1,10 @@
+[33m75b1e66[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m Merge pull request #42 from Chidera0001/feature/dashboard-welcome-message
+[33m4f9cb91[m[33m ([m[1;31morigin/feature/dashboard-welcome-message[m[33m)[m Merge branch 'develop' into feature/dashboard-welcome-message
+[33m4b3c076[m[33m ([m[1;32mfeature/dashboard-welcome-message[m[33m)[m feat: new text
+[33mfd04483[m fix: format Dashboard.js with Prettier to resolve code style issues
+[33m1575a23[m fix: update API URL to point to live Azure backend instead of localhost
+[33m7bdb743[m fix: simplify CHANGELOG update to just commit to current branch to avoid permission issues
+[33m0835331[m fix: add top-level permissions for contents and pull-requests write to allow automated PR creation
+[33m13b6f57[m fix: replace direct push to main with automated PR creation for CHANGELOG updates to respect branch protection
+[33m5db1143[m fix: add --allow-unrelated-histories flag to handle repositories with different histories
+[33me2f9bef[m fix: add git config pull.rebase false to handle divergent branches in newer Git versions
