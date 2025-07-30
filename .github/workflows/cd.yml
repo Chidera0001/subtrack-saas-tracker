@@ -253,6 +253,7 @@ jobs:
                   git config --local user.name "GitHub Action"
                   git add CHANGELOG.md
                   git commit -m "docs: update changelog for deployment" || exit 0
+                  git config pull.rebase false
                   git pull origin main -s recursive -X theirs --no-edit
                   git push origin HEAD:main
               env:
