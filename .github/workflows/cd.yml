@@ -6,6 +6,10 @@ on:
     pull_request:
         branches: [main]
 
+permissions:
+    contents: write
+    pull-requests: write
+
 env:
     REGISTRY: ${{ secrets.REGISTRY_NAME }}.azurecr.io
     BACKEND_IMAGE: ${{ secrets.REGISTRY_NAME }}.azurecr.io/subtrack-saas-tracker-backend
@@ -213,8 +217,15 @@ jobs:
         needs: build-and-push-production
         if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && github.base_ref == 'main')
         environment: production
+        permissions:
+            contents: write
 
         steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
             - name: Azure Login
               uses: azure/login@v1
               with:
@@ -240,12 +251,11 @@ jobs:
                   echo "- Automated deployment from main branch" >> CHANGELOG.md
                   echo "" >> CHANGELOG.md
 
-            - name: Commit and push CHANGELOG
+            - name: Commit CHANGELOG update
               run: |
                   git config --local user.email "action@github.com"
                   git config --local user.name "GitHub Action"
                   git add CHANGELOG.md
                   git commit -m "docs: update changelog for deployment" || exit 0
-                  git push origin HEAD:main
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
