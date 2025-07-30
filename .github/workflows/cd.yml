@@ -161,13 +161,13 @@ jobs:
             - name: Deploy to staging
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: "subtrack-saas-tracker-backend-staging"
+                  app-name: "subtrack-backend-staging"
                   images: ${{ env.BACKEND_IMAGE }}:staging
 
             - name: Deploy frontend to staging
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: "subtrack-saas-tracker-frontend-staging"
+                  app-name: "subtrack-frontend-staging"
                   images: ${{ env.FRONTEND_IMAGE }}:staging
 
     build-and-push-production:
@@ -223,13 +223,13 @@ jobs:
             - name: Deploy backend to production
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: "subtrack-saas-tracker-backend"
+                  app-name: "subtrack-backend"
                   images: ${{ env.BACKEND_IMAGE }}:latest
 
             - name: Deploy frontend to production
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: "subtrack-saas-tracker-frontend"
+                  app-name: "subtrack-frontend"
                   images: ${{ env.FRONTEND_IMAGE }}:latest
 
             - name: Update CHANGELOG
