@@ -78,6 +78,9 @@ const Dashboard = ({ token, user }) => {
 	return (
 		<div className="dashboard">
 			<div className="dashboard-header">
+				<h1>
+					Welcome {user.name} today's date is {new Date().toLocaleDateString()}
+				</h1>
 				<h2>Your Subscriptions</h2>
 				<div className="dashboard-stats">
 					<span className="stat-item">
