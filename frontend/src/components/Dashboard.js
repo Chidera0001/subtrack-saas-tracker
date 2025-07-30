@@ -16,7 +16,8 @@ const Dashboard = ({ token, user }) => {
 		try {
 			const response = await axios.get(
 				`${
-					process.env.REACT_APP_API_URL || "https://subtrack-backend.azurewebsites.net"
+					process.env.REACT_APP_API_URL ||
+					"https://subtrack-backend.azurewebsites.net"
 				}/api/subscriptions`,
 				{
 					headers: { Authorization: `Bearer ${token}` },
@@ -46,7 +47,8 @@ const Dashboard = ({ token, user }) => {
 		try {
 			await axios.post(
 				`${
-					process.env.REACT_APP_API_URL || "https://subtrack-backend.azurewebsites.net"
+					process.env.REACT_APP_API_URL ||
+					"https://subtrack-backend.azurewebsites.net"
 				}/api/subscriptions`,
 				formData,
 				{
