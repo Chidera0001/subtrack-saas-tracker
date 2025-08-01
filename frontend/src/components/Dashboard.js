@@ -81,7 +81,8 @@ const Dashboard = ({ token, user }) => {
 		<div className="dashboard">
 			<div className="dashboard-header">
 				<h1>
-					Welcome {user.name}! Today's date is {new Date().toLocaleDateString()}
+					Welcome {user.name}! The date today is{" "}
+					{new Date().toLocaleDateString()}
 				</h1>
 				<h2>Your Subscriptions</h2>
 				<div className="dashboard-stats">
